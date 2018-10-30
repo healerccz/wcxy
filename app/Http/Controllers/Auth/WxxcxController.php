@@ -31,7 +31,7 @@ class WxxcxController extends Controller
             'numeric'   => '数据不合法'
         ];
         return Validator::make($data, [
-            'code'          => 'required|numeric',
+            'code'          => 'required|string',
             'encryptedData' => 'required',
             'iv'            => 'required'
         ]);
@@ -51,7 +51,6 @@ class WxxcxController extends Controller
         }
         $user->save($data);
     }
-
 
     /**
      * 登录并获取用户信息
@@ -97,7 +96,7 @@ class WxxcxController extends Controller
             $this->updateOrCreate($data);
             $sessionKey = md5($data['openid'] . $data['nick_name'] . time());
 //            var_dump($sessionKey);
-            session()->put($sessionKey, 1);
+            session()->put($sessionKey, $openid);
             session()->save();
 //            var_dump(session($sessionKey));
 
