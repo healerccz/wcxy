@@ -100,7 +100,7 @@ class WxxcxController extends Controller
             session()->save();
 //            var_dump(session($sessionKey));
 
-            return response()->json([
+            return json_encode([
                 'nick_name'     => $userInfo['nickName'] ? $userInfo['nickName'] : '',
                 'city'          => $userInfo['city'] ? $userInfo['city'] : '',
                 'province'      => $userInfo['province'] ? $userInfo['province'] : '',
