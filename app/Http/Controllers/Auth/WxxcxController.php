@@ -45,10 +45,16 @@ class WxxcxController extends Controller
      */
     public function updateOrCreate($data)
     {
-        $user = User::where('openid', $data['openid']);
+        $user = User::where('openid', $data['openid'])->first();
         if (!$user) {
             $user = new User;
         }
+        $user->openid = $data['openid'];
+        $user->nick_name = $data['nick_name'];
+        $user->city = $data['city'];
+        $user->province = $data['province'];
+        $user->avatar_url = $data['avatar_url'];
+        $user->updated_at = $data['updated_at'];
         $user->save($data);
     }
 
@@ -84,29 +90,30 @@ class WxxcxController extends Controller
             $user = $this->wxxcx->getLoginInfo($code);//根据 code 获取用户 session_key 等信息, 返回用户openid 和 session_key
             $openid = $user['openid'];
             $userInfo = $this->wxxcx->getUserInfo($encryptedData, $iv); // 获取用户信息
+            $userInfo = json_decode($userInfo, true);
+
             $data = [
                 'openid'        => $openid,
                 'nick_name'     => $userInfo['nickName'] ? $userInfo['nickName'] : '',
                 'city'          => $userInfo['city'] ? $userInfo['city'] : '',
                 'province'      => $userInfo['province'] ? $userInfo['province'] : '',
                 'avatar_url'    => $userInfo['avatarUrl'] ? $userInfo['avatarUrl'] : '',
-                'union_id'      => $userInfo['unionId'] ? $userInfo['unionId'] : '',
                 'updated_at'    => Carbon::now()
             ];
             $this->updateOrCreate($data);
             $sessionKey = md5($data['openid'] . $data['nick_name'] . time());
-//            var_dump($sessionKey);
             session()->put($sessionKey, $openid);
             session()->save();
-//            var_dump(session($sessionKey));
-
+            $data =  [
+                'nickName'     => $userInfo['nickName'],
+                'city'          => $userInfo['city'],
+                'province'      => $userInfo['province'],
+                'avatarUrl'    => $userInfo['avatarUrl'],
+                'updatedAt'    => Carbon::now()
+            ];
             return json_encode([
-                'nick_name'     => $userInfo['nickName'] ? $userInfo['nickName'] : '',
-                'city'          => $userInfo['city'] ? $userInfo['city'] : '',
-                'province'      => $userInfo['province'] ? $userInfo['province'] : '',
-                'avatar_url'    => $userInfo['avatarUrl'] ? $userInfo['avatarUrl'] : '',
-                'union_id'      => $userInfo['unionId'] ? $userInfo['unionId'] : '',
-                'updated_at'    => Carbon::now()
+                'code'  => 2000,
+                'data'  => $data
             ]);
         }
     }

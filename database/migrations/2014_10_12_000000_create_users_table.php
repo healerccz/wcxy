@@ -20,7 +20,6 @@ class CreateUsersTable extends Migration
             $table->string('city')->nullable()->default('');
             $table->string('province')->nullable()->default('');
             $table->string('avatar_url')->nullable()->default('');
-            $table->string('union_id')->nullable()->default('');
             $table->timestamps();
         });
     }
