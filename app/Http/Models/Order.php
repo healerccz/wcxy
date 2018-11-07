@@ -4,16 +4,16 @@ namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Order extends Model
 {
-    protected $table = 'users';
+    protected $table = 'orders';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'openid', 'nickname', 'city', 'province', 'avatarUrl', 'unionId'
+        'start_time', 'end_time', 'dormitory', 'mobile', 'note', 'status'
     ];
 
     public $timestamps = true;

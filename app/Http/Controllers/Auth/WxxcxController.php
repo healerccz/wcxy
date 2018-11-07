@@ -56,6 +56,8 @@ class WxxcxController extends Controller
         $user->avatar_url = $data['avatar_url'];
         $user->updated_at = $data['updated_at'];
         $user->save($data);
+
+        return $user->permission;
     }
 
     /**
@@ -100,7 +102,7 @@ class WxxcxController extends Controller
                 'avatar_url'    => $userInfo['avatarUrl'] ? $userInfo['avatarUrl'] : '',
                 'updated_at'    => Carbon::now()
             ];
-            $this->updateOrCreate($data);
+            $perssion = $this->updateOrCreate($data);
             $sessionKey = md5($data['openid'] . $data['nick_name'] . time());
             session()->put($sessionKey, $openid);
             session()->save();
@@ -109,6 +111,7 @@ class WxxcxController extends Controller
                 'city'          => $userInfo['city'],
                 'province'      => $userInfo['province'],
                 'avatarUrl'    => $userInfo['avatarUrl'],
+                'permission'    => $perssion,
                 'updatedAt'    => Carbon::now()
             ];
             return json_encode([
