@@ -16,9 +16,9 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->string('start_time', 1);  // 开始送水时间
-            $table->string('end_time', 1);  // 结束送水时间
-            $table->string('dormitory', 3);  // 宿舍
+            $table->string('time', 1);  // 送水时间段
+            $table->string('dormitory', 2);  // 宿舍
+            $table->string('room', 3);  // 房间号
             $table->string('mobile', 11);  // 宿舍
             $table->string('note', 50)->nullable()->default(''); // 备注
             $table->string('status', 50)->default(''); // 订单状态

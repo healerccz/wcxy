@@ -25,11 +25,11 @@ class AddOrderController extends Controller
         ];
 
         return Validator::make($data, [
-            'start_time' => 'required|string|size:1',
-            'end_time' => 'required|string|size:1',
-            'dormitory' => 'required|string|size:2',
-            'mobile' => ['regex:/^1+[35678]+\\d{9}/'],
-            'note' => 'required|string',
+            'time' => 'required|string|size:1',
+            'dormitory' => 'required|string|min:1|max:2',
+            'room' => 'required|string|size:3',
+            'mobile' => ['required', 'regex:/^1+[35678]+\\d{9}/'],
+            'note' => 'nullable|string',
         ], $message);
     }
 
@@ -45,11 +45,11 @@ class AddOrderController extends Controller
     }
 
     /**
-     * 用户注册
+     * 用户下单
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request)
+    public function addOrder(Request $request)
     {
         if ($request->isMethod('post')) {
             $validator = $this->validator($request->all());
@@ -59,55 +59,47 @@ class AddOrderController extends Controller
                     $code = 1001;
                 } else if ($errors == "数据不合法") {
                     $code = 1002;
-                } else if ($errors == "用户已存在") {
-                    $code = 1003;
                 } else {
-                    $code = 5001;
+                    $code = 5000;
                 }
                 return response()->json([
                     'code' => $code,
                     'msg' => $errors
                 ]);
             }
-            //判断密码是否一致
-            $password = request('password');
-            $passwordConfirm = request('passwordConfirm');
-            if ($password != $passwordConfirm) {
-                return response()->json([
-                    'code'  => 3001,
-                    'msg'   => '密码不一致'
-                ]);
-            }
-            $mobile = request('mobile');
-            $code_request = request('code');
-            $code = session(base64_encode($mobile));
-//            $code = Redis::get('name');
-//            var_dump($code);
-//            var_dump($code_request);
-            // 判断验证码是否正确
-            if ($code == $code_request) {
-                session()->put(base64_encode($mobile), null);
-                $data = [
-                    'mobile'    => $mobile,
-                    'password'  => bcrypt($password)
-                ];
-                $res = $this->create($data);
-                if (!$res) {
-                    return response()->json([
-                        'code' => 5001,
-                        'msg' => '未知错误'
-                    ]);
-                }
-                return response()->json([
-                    'code' => 2000,
-                    'data' => $mobile
-                ]);
-            } else {
-                return response()->json([
-                    'code'  => 3002,
-                    'msg'   => '验证码错误'
-                ]);
-            }
+            $userId = session('userId');
+            $openid = session('openid');
+            $permission = session('permission');
+            var_dump($userId);
+            var_dump($openid);
+            var_dump($permission);
+//            $userId = 1;
+//            $time = request('time');
+//            $dormitory = request('dormitory');
+//            $mobile = request('mobile');
+//            $note = request('note');
+//            $room = request('room');
+//            $data = [
+//                'time'      => $time,
+//                'dormitory' => $dormitory,
+//                'mobile'    => $mobile,
+//                'note'      => $note,
+//                'status'    => 0,
+//                'user_id'   => $userId,
+//                'room'      => $room
+//            ];
+//            $ret = $this->create($data);
+//            if ($ret) {
+//                return response()->json([
+//                    'code' => 2000,
+//                    'data' => ''
+//                ]);
+//            } else {
+//                return response()->json([
+//                    'code'  => 5000,
+//                    'msg'   => '未知错误'
+//                ]);
+//            }
         }
     }
 }

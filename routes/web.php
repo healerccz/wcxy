@@ -15,4 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// 用户登录并获取用户信息
 Route::post('login', "Auth\WxxcxController@getWxUserInfo");
+// 用户下单
+Route::post('order/add', "Order\AddOrderController@addOrder")->middleware('check.login');
+// 用户查询自己的订单
+Route::post('order/find', "Order\FindOrderController@findOrder");

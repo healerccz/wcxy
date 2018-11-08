@@ -34,7 +34,7 @@ class WxxcxController extends Controller
             'code'          => 'required|string',
             'encryptedData' => 'required',
             'iv'            => 'required'
-        ]);
+        ], $message);
     }
 
     /**
@@ -50,14 +50,10 @@ class WxxcxController extends Controller
             $user = new User;
         }
         $user->openid = $data['openid'];
-        $user->nick_name = $data['nick_name'];
-        $user->city = $data['city'];
-        $user->province = $data['province'];
-        $user->avatar_url = $data['avatar_url'];
         $user->updated_at = $data['updated_at'];
         $user->save($data);
 
-        return $user->permission;
+        return $user;
     }
 
     /**
@@ -93,30 +89,20 @@ class WxxcxController extends Controller
             $openid = $user['openid'];
             $userInfo = $this->wxxcx->getUserInfo($encryptedData, $iv); // 获取用户信息
             $userInfo = json_decode($userInfo, true);
-
             $data = [
                 'openid'        => $openid,
-                'nick_name'     => $userInfo['nickName'] ? $userInfo['nickName'] : '',
-                'city'          => $userInfo['city'] ? $userInfo['city'] : '',
-                'province'      => $userInfo['province'] ? $userInfo['province'] : '',
-                'avatar_url'    => $userInfo['avatarUrl'] ? $userInfo['avatarUrl'] : '',
                 'updated_at'    => Carbon::now()
             ];
-            $perssion = $this->updateOrCreate($data);
-            $sessionKey = md5($data['openid'] . $data['nick_name'] . time());
-            session()->put($sessionKey, $openid);
+            $user = $this->updateOrCreate($data);
+            $permission = $user->permission;
+            $userId = $user->user_id;
+            session()->put("permission", $permission);
+            session()->put("userId", $userId);
+            session()->put("openid", $openid);
             session()->save();
-            $data =  [
-                'nickName'     => $userInfo['nickName'],
-                'city'          => $userInfo['city'],
-                'province'      => $userInfo['province'],
-                'avatarUrl'    => $userInfo['avatarUrl'],
-                'permission'    => $perssion,
-                'updatedAt'    => Carbon::now()
-            ];
             return json_encode([
                 'code'  => 2000,
-                'data'  => $data
+                'data'  => ""
             ]);
         }
     }

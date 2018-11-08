@@ -13,7 +13,8 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'start_time', 'end_time', 'dormitory', 'mobile', 'note', 'status'
+        'time', 'dormitory', 'mobile',
+        'note', 'status', 'user_id', 'room'
     ];
 
     public $timestamps = true;
