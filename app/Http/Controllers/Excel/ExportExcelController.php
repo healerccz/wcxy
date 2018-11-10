@@ -88,7 +88,7 @@ class ExportExcelController extends Controller
             $end = date('Y-m-d', $endTime);
             $excelName = $start . '--' . $end;
             $sheet = 'sheet1';
-            
+
             Excel::create($excelName,function($excel) use ($data, $sheet){
                 $excel->sheet($sheet, function($sheet) use ($data){
                     $sheet->rows($data);
