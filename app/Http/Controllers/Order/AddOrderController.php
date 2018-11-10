@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Models\Order;
+use App\Http\Controllers\Auth\TokenController as Token;
 
 class AddOrderController extends Controller
 {
@@ -67,39 +68,37 @@ class AddOrderController extends Controller
                     'msg' => $errors
                 ]);
             }
-            $userId = session('userId');
-            $openid = session('openid');
-            $permission = session('permission');
-            var_dump($userId);
-            var_dump($openid);
-            var_dump($permission);
-//            $userId = 1;
-//            $time = request('time');
-//            $dormitory = request('dormitory');
-//            $mobile = request('mobile');
-//            $note = request('note');
-//            $room = request('room');
-//            $data = [
-//                'time'      => $time,
-//                'dormitory' => $dormitory,
-//                'mobile'    => $mobile,
-//                'note'      => $note,
-//                'status'    => 0,
-//                'user_id'   => $userId,
-//                'room'      => $room
-//            ];
-//            $ret = $this->create($data);
-//            if ($ret) {
-//                return response()->json([
-//                    'code' => 2000,
-//                    'data' => ''
-//                ]);
-//            } else {
-//                return response()->json([
-//                    'code'  => 5000,
-//                    'msg'   => '未知错误'
-//                ]);
-//            }
+            $tokenObject = new Token();
+            $userId = $tokenObject->getUserId();
+            $openid = $tokenObject->getOpenid();
+            $permission = $tokenObject->getUserPermission();
+
+            $time = request('time');
+            $dormitory = request('dormitory');
+            $mobile = request('mobile');
+            $note = request('note');
+            $room = request('room');
+            $data = [
+                'time'      => $time,
+                'dormitory' => $dormitory,
+                'mobile'    => $mobile,
+                'note'      => $note,
+                'status'    => 0,
+                'user_id'   => $userId,
+                'room'      => $room
+            ];
+            $ret = $this->create($data);
+            if ($ret) {
+                return response()->json([
+                    'code' => 2000,
+                    'data' => ''
+                ]);
+            } else {
+                return response()->json([
+                    'code'  => 5000,
+                    'msg'   => '未知错误'
+                ]);
+            }
         }
     }
 }

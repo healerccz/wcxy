@@ -8,6 +8,7 @@ use Iwanli\Wxxcx\Wxxcx;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Models\User;
 use Carbon\Carbon;
+use App\Http\Controllers\Auth\TokenController as Token;
 
 class WxxcxController extends Controller
 {
@@ -95,15 +96,15 @@ class WxxcxController extends Controller
             ];
             $user = $this->updateOrCreate($data);
             $permission = $user->permission;
-            $userId = $user->user_id;
-            session()->put("permission", $permission);
-            session()->put("userId", $userId);
-            session()->put("openid", $openid);
-            session()->save();
-            return json_encode([
+            $userId = $user->id;
+
+            $tokenObject = new Token();
+            $token = $tokenObject->createToken($userId, $permission, $openid);
+
+            return response()->json([
                 'code'  => 2000,
-                'data'  => ""
-            ]);
+                'data'  => "",
+            ])->header('Authorization', $token);
         }
     }
 }
