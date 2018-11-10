@@ -27,5 +27,4 @@ Route::get('order/find_today', 'Admin\FindTodayOrderController@findTodayOrder');
 // 管理员修改订单状态
 Route::post('order/modify', 'Admin\ModifyOrderController@modifyOrder');
 // 管理员导出Excel
-Route::get('excel/export', 'Excel\ExcelController@export');
-
+Route::post('excel/export', 'Excel\ExportExcelController@exportExcel');

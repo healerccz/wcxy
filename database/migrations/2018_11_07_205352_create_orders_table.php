@@ -20,8 +20,8 @@ class CreateOrdersTable extends Migration
             $table->string('dormitory', 2);  // 宿舍
             $table->string('room', 3);  // 房间号
             $table->string('mobile', 11);  // 宿舍
-            $table->string('note', 50)->nullable()->default(''); // 备注
-            $table->string('status', 50)->default(''); // 订单状态
+            $table->string('note', 100)->nullable()->default(''); // 备注
+            $table->string('status', 1)->default(''); // 订单状态
             $table->timestamps();
         });
     }

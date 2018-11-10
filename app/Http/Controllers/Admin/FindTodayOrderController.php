@@ -20,6 +20,7 @@ class FindTodayOrderController extends Controller
             $userId = $tokenObject->getUserId();
             $openid = $tokenObject->getOpenid();
             $permission = $tokenObject->getUserPermission();
+
             if ($permission != 1) {
                 return response()->json([
                     'code'  => 4003,
@@ -30,9 +31,8 @@ class FindTodayOrderController extends Controller
             $page = $page <= 1 ? 1 : $page;
             $pageSize = 2;
             $offset = ($page - 1) * $pageSize;
-            $data = time();
             $orders = DB::table('orders')
-                ->where('create_at', '=', date('d'))
+                ->where('create_at', '=', date('Y-m-d', time()))
                 ->offset($offset)->limit($pageSize)
                 ->get();
 
