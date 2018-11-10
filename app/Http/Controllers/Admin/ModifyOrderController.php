@@ -20,7 +20,7 @@ class ModifyOrderController extends Controller
     {
         $message = [
             'required' => '数据不能为空',
-            'size' => '数据不合法',
+            'numeric' => '数据不合法',
         ];
 
         return Validator::make($data, [
