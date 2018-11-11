@@ -103,7 +103,9 @@ class WxxcxController extends Controller
 
             return response()->json([
                 'code'  => 2000,
-                'data'  => "",
+                'data'  => [
+                    'permission'    => $permission
+                ],
             ])->header('Authorization', $token);
         }
     }
