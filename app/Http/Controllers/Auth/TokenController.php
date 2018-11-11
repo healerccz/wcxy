@@ -54,7 +54,7 @@ class TokenController extends Controller
         return [
             "iss"       => "https://api.changxiaoyuan.com",
             "iat"       => $_SERVER['REQUEST_TIME'],
-            "exp"       => $_SERVER['REQUEST_TIME'] + 7200,
+            "exp"       => $_SERVER['REQUEST_TIME'] + 25200,
             "GivenName" => "CreatShare",
             "userId"  => $userId,
             "permission"=> $permission,

@@ -72,7 +72,7 @@ class FindOrderController extends Controller
                 $data[$i]['room'] = $orders[$i]->room;
                 $data[$i]['mobile'] = $orders[$i]->mobile;
                 $data[$i]['note'] = $orders[$i]->note;
-                $data[$i]['createdAt'] = strtotime($orders[$i]->created_at);
+                $data[$i]['createdAt'] = $orders[$i]->created_at;
                 $data[$i]['status'] = strtotime($orders[$i]->status);
             }
             return response()->json([
